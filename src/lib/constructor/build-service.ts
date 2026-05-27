@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { constructorBuilds, constructorUploads } from "@/lib/db/schema";
 import { buildTechnicalDescription } from "@/lib/constructor/metadata";
 import { matchVariantBySelection } from "@/lib/constructor/variants";
@@ -24,6 +24,7 @@ export async function createBuildRecord(params: {
   templateProductId: number;
   uploadId: string;
 }) {
+  const db = getDb();
   const buildId = crypto.randomUUID();
 
   await db.insert(constructorBuilds).values({
@@ -42,6 +43,7 @@ export async function createBuildRecord(params: {
 }
 
 export async function getUploadById(uploadId: string) {
+  const db = getDb();
   const [upload] = await db
     .select()
     .from(constructorUploads)
@@ -80,6 +82,7 @@ export async function processBuild(params: {
   selectedOptions: Record<string, string>;
   templateProductId: number;
 }) {
+  const db = getDb();
   try {
     const templateProduct = await getTemplateProduct(params.templateProductId);
     const templateVariant = matchVariantBySelection(
@@ -176,6 +179,7 @@ export async function processBuild(params: {
 }
 
 export async function getBuildDetails(buildId: string) {
+  const db = getDb();
   const [build] = await db
     .select()
     .from(constructorBuilds)
@@ -190,6 +194,7 @@ export async function getBuildDetails(buildId: string) {
 }
 
 export async function getBuildForUpload(buildId: string, uploadId: string) {
+  const db = getDb();
   const [build] = await db
     .select()
     .from(constructorBuilds)

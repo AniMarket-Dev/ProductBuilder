@@ -21,7 +21,7 @@ export default function HomePage() {
           <div className="flex flex-wrap gap-4">
             <Link
               className="inline-flex items-center justify-center rounded-full bg-gold-500 px-6 py-3 font-semibold text-white transition hover:bg-gold-600"
-              href="/constructor?templateProductId=1"
+              href="/builder?templateProductId=1"
             >
               Открыть конструктор
             </Link>

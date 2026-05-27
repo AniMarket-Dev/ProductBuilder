@@ -1,9 +1,10 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
-import { pool } from "@/lib/db";
+import { getPool } from "@/lib/db";
 
 async function run() {
+  const pool = getPool();
   const migrationsPath = path.resolve(process.cwd(), "drizzle");
   const files = (await readdir(migrationsPath))
     .filter((fileName) => fileName.endsWith(".sql"))
@@ -20,6 +21,7 @@ async function run() {
 }
 
 run().catch(async (error) => {
+  const pool = getPool();
   console.error(error);
   await pool.end();
   process.exit(1);

@@ -1,7 +1,7 @@
 import { imageSize } from "image-size";
 import { NextResponse } from "next/server";
 
-import { db } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { constructorUploads } from "@/lib/db/schema";
 import { getEnv } from "@/lib/env";
 import { HttpError, toHttpError } from "@/lib/http";
@@ -13,6 +13,7 @@ export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
+    const db = getDb();
     await enforceOrigin();
     await enforceRateLimit("upload", {
       limit: 20,

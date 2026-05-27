@@ -7,15 +7,26 @@ declare global {
   var __constructorPool: Pool | undefined;
 }
 
-const pool =
-  globalThis.__constructorPool ??
-  new Pool({
+let cachedDb: ReturnType<typeof drizzle> | null = null;
+
+export function getPool() {
+  if (globalThis.__constructorPool) {
+    return globalThis.__constructorPool;
+  }
+
+  const pool = new Pool({
     connectionString: getEnv().DATABASE_URL,
   });
 
-if (!globalThis.__constructorPool) {
   globalThis.__constructorPool = pool;
+  return pool;
 }
 
-export const db = drizzle(pool);
-export { pool };
+export function getDb() {
+  if (cachedDb) {
+    return cachedDb;
+  }
+
+  cachedDb = drizzle(getPool());
+  return cachedDb;
+}
